@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Employee Report UI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+	<script type="text/javascript" src='services.js'></script>
+    
+	<style>
+
+		body{
+
+			background-color: #4B9CD3;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+		}
+
+		#main-wrapper{
+			margin:20%;
+			display: inline-block;
+			background-color: white;
+			border-radius:2%;
+			padding:3%;
+		}
+        #table-wrapper{
+            width: 600px;
+			padding: 10px;
+			margin-top:5%;
+        }
+		.input-group{
+            width: 600px;
+			padding: 10px;
+        }
+		#report-result{
+			display: inline-block;
+			padding: 10px;
+		}
+
+	</style>
+
+</head>
+
+<body>
+
+<script>
+
+
+		function appendResultOnScreen(response){
+
+			const resultData = `${response.empId1}, ${response.empId2}, ${response.overlappingDuration};`;
+	        const outputDiv = document.getElementById('report-result');
+			outputDiv.innerHTML = resultData;
+		}
+
+
+		function createTableRows(projectData){
+
+			for (key in projectData) {
+
+			  appendRow(projectData[key].empId, projectData[key].projectId, projectData[key].dateFrom, projectData[key].dateTo);
+
+			}
+
+		}
+
+
+		function appendRow(empId, projectId, dateFrom, dateTo){
+
+		    var newRow = document.createElement('tr');
+
+			   newRow.innerHTML = '\
+				<th scope="row">' + empId + '</th>\
+				<td>' + projectId + '</td>\
+				<td>' + dateFrom + '</td>\
+				<td>' + dateTo + '</td>';
+
+            document.getElementById('dataTable').getElementsByTagName('tbody')[0].appendChild(newRow);
+
+		}
+
+
+
+    </script>
+
+
+
+<div id="main-wrapper">
+    <h3>Employee Reporting</h3>
+
+    <div class="input-group custom-input-group">
+        <input id="file-input" class="form-control" type="file" accept=".csv">
+        <button id="upload-file-button" type="button" class="btn btn-primary" disabled>Upload File</button>
+    </div>
+
+    <div id="report-result">	</div>
+    <div id="table-wrapper">
+
+        <table class="table" id="dataTable">
+            <thead>
+            <tr>
+                <th scope="col">empId</th>
+                <th scope="col">projectId</th>
+                <th scope="col">dateFrom</th>
+                <th scope="col">dateTo</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+
+		const file = null;
+
+        function enableButton(buttonId) {
+
+            let myButton = document.getElementById(buttonId);
+			console.log(myButton);
+            myButton.disabled = false;
+
+        }
+
+		// =====
+
+		const fileInput = document.getElementById('file-input');
+		fileInput.onchange = () => {
+
+			const selectedFiles = [...fileInput.files];
+			if(selectedFiles.length === 1){
+
+				this.file = fileInput.files[0];
+				enableButton("upload-file-button");
+
+			}
+		}
+
+		// =====
+
+		const uploadButton = document.getElementById('upload-file-button');
+		uploadButton.onclick = () => {
+
+            console.log(" ___ uploadFile ___ ");
+			console.log(this.file);
+			uploadFile(this.file)
+		}
+
+
+
+</script>
+
+</body>
+</html>
